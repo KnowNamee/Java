@@ -7,7 +7,7 @@ import data.Shape;
 import data.Sphere;
 import exceptions.MyException;
 import org.xml.sax.SAXException;
-import util.XMLHandler;
+import util.XMLShapesHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -28,7 +28,7 @@ public final class Window extends JFrame {
 
     private DefaultTableModel tableModel;
 
-    private XMLHandler xmlHandler = new XMLHandler();
+    private XMLShapesHandler xmlHandler = new XMLShapesHandler();
 
     private static final int screenWidth =
             Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -84,37 +84,29 @@ public final class Window extends JFrame {
         c.add(btnAdd);
         c.add(btnDel);
 
-        btnAdd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                AddShapeDialog dialogue = new AddShapeDialog(new String[] {
-                        Parallelepiped.SHAPE_NAME,
-                        Sphere.SHAPE_NAME,
-                        Pyramid.SHAPE_NAME
-                });
-                ArrayList<String> data = dialogue.show();
-                try {
-                    addShape(data);
-                    drawTable();
-                } catch (MyException exception) {
-                    JOptionPane.showMessageDialog(
-                            null,
-                            exception.getMessage(),
-                            "Warning!!!",
-                            JOptionPane.WARNING_MESSAGE);
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+        btnAdd.addActionListener(e -> {
+            AddShapeDialog dialogue = new AddShapeDialog(new String[] {
+                    Parallelepiped.SHAPE_NAME,
+                    Sphere.SHAPE_NAME,
+                    Pyramid.SHAPE_NAME
+            });
+            ArrayList<String> data = dialogue.show();
+            try {
+                addShape(data);
+                drawTable();
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        exception.getMessage(),
+                        "Warning!!!",
+                        JOptionPane.WARNING_MESSAGE);
             }
         });
-        btnDel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = table.getSelectedRow();
-                if (selectedRow != -1) {
-                    backpack.removeShape(selectedRow);
-                    drawTable();
-                }
+        btnDel.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                backpack.removeShape(selectedRow);
+                drawTable();
             }
         });
 
@@ -141,11 +133,14 @@ public final class Window extends JFrame {
             int result = chooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
-                    xmlHandler.load(chooser.getSelectedFile());
-                    getBackpack().setShapes(xmlHandler.getShapes());
-                } catch (ParserConfigurationException | SAXException | IOException
-                         parserConfigurationException) {
-                    parserConfigurationException.printStackTrace();
+                    setBackpack(xmlHandler.load(chooser.getSelectedFile()));
+                    drawTable();
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            exception.getMessage(),
+                            "Warning!!!",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             }
             revalidate();
@@ -157,21 +152,21 @@ public final class Window extends JFrame {
             int result = chooser.showSaveDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
-                    xmlHandler.addShapes(backpack.getShapes());
-                    xmlHandler.save(chooser.getSelectedFile());
-                } catch (TransformerException transformerException) {
-                    transformerException.printStackTrace();
+                    xmlHandler.save(chooser.getSelectedFile(), getBackpack());
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            exception.getMessage(),
+                            "Warning!!!",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             }
-            revalidate();
-            repaint();
         });
 
         fileMenu.add(openXML);
         fileMenu.add(saveXML);
         menuBar.add(fileMenu);
         this.setJMenuBar(menuBar);
-
         revalidate();
     }
 
@@ -185,7 +180,7 @@ public final class Window extends JFrame {
             }
         }
         String shapeName = data.get(0);
-        Shape shape = null;
+        Shape shape;
         switch (shapeName) {
             case Parallelepiped.SHAPE_NAME -> {
                 shape = new Parallelepiped(

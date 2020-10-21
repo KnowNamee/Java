@@ -1,0 +1,33 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="backpack">
+    <xsd:complexType>
+      <xsd:choice maxOccurs="unbounded" minOccurs="0">
+        <xsd:element name="Parallelepiped" maxOccurs="unbounded" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element type="xsd:float" name="height" minOccurs="1" maxOccurs="1"/>
+              <xsd:element type="xsd:float" name="width" minOccurs="1" maxOccurs="1"/>
+              <xsd:element type="xsd:float" name="length" minOccurs="1" maxOccurs="1"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="Sphere" maxOccurs="unbounded" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element type="xsd:float" name="radius" minOccurs="1" maxOccurs="1"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="Pyramid" maxOccurs="unbounded" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element type="xsd:float" name="square" minOccurs="1" maxOccurs="1"/>
+              <xsd:element type="xsd:float" name="length" minOccurs="1" maxOccurs="1"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:choice>
+      <xsd:attribute type="xsd:float" name="capacity" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

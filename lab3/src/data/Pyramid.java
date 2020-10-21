@@ -4,24 +4,37 @@ public class Pyramid extends Shape {
 
     public static final String SHAPE_NAME = "Pyramid";
 
-    private double s;
-    private double h;
+    public static final int PARAMS_COUNT = 2;
+    public static final int S_PARAM_IDX = 0;  // Square
+    public static final int H_PARAM_IDX = 1;  // Height
+
+    private Double[] paramValues = new Double[PARAMS_COUNT];
+    public static final String[] PARAM_NAMES = new String[] {"square", "length"};
 
     private Pyramid() { }
 
     public Pyramid(double s, double h) {
-        this.s = s;
-        this.h = h;
+        paramValues[S_PARAM_IDX] = s;
+        paramValues[H_PARAM_IDX] = h;
+    }
+
+    public Pyramid(Double[] paramValues) {
+        this.paramValues = paramValues;
     }
 
     @Override
     public double getVolume() {
-        return (1. / 3.) *  s * h;
+        return (1. / 3.) * paramValues[S_PARAM_IDX] *
+                           paramValues[H_PARAM_IDX];
     }
 
     @Override
     public String getShapeName() {
         return Pyramid.SHAPE_NAME;
+    }
+
+    public Double[] getParamValues() {
+        return paramValues;
     }
 
     @Override
@@ -30,18 +43,18 @@ public class Pyramid extends Shape {
     }
 
     public double getS() {
-        return s;
+        return paramValues[S_PARAM_IDX];
     }
 
     public void setS(double s) {
-        this.s = s;
+        paramValues[S_PARAM_IDX] = s;
     }
 
     public double getH() {
-        return h;
+        return paramValues[H_PARAM_IDX];
     }
 
     public void setH(double h) {
-        this.h = h;
+        paramValues[H_PARAM_IDX] = h;
     }
 }

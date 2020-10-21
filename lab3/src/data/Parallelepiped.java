@@ -4,21 +4,36 @@ public class Parallelepiped extends Shape {
 
     public static final String SHAPE_NAME = "Parallelepiped";
 
-    private double lenX;
-    private double lenY;
-    private double lenZ;
+    public static final int PARAMS_COUNT = 3;
+    public static final int H_PARAM_IDX = 0;  // Height
+    public static final int W_PARAM_IDX = 1;  // Width
+    public static final int L_PARAM_IDX = 2;  // Length
+
+    private Double[] paramValues = new Double[PARAMS_COUNT];
+    public static final String[] PARAM_NAMES = new String[] {"height", "width", "length"};
 
     private Parallelepiped() { }
 
-    public Parallelepiped(double lenX, double lenY, double lenZ) {
-        this.lenX = lenX;
-        this.lenY = lenY;
-        this.lenZ = lenZ;
+    public Parallelepiped(double h, double w, double l) {
+        paramValues[H_PARAM_IDX] = h;
+        paramValues[W_PARAM_IDX] = w;
+        paramValues[L_PARAM_IDX] = l;
+    }
+
+    public Double[] getParamValues() {
+        return paramValues;
+    }
+
+    public Parallelepiped(Double[] paramValues) {
+        this.paramValues = paramValues;
     }
 
     @Override
     public double getVolume() {
-        return Math.abs(lenX * lenY * lenZ);
+        return Math.abs(
+                paramValues[H_PARAM_IDX] *
+                paramValues[W_PARAM_IDX] *
+                paramValues[L_PARAM_IDX]);
     }
 
     @Override
@@ -31,27 +46,28 @@ public class Parallelepiped extends Shape {
         return String.format("%s %.2f", SHAPE_NAME, getVolume());
     }
 
-    public double getLenX() {
-        return lenX;
+    public double getH() {
+        return paramValues[H_PARAM_IDX];
     }
 
-    public void setLenX(double lenX) {
-        this.lenX = lenX;
+    public void setH(double h) {
+        paramValues[H_PARAM_IDX] = h;
     }
 
-    public double getLenY() {
-        return lenY;
+    public double getW() {
+        return paramValues[W_PARAM_IDX];
     }
 
-    public void setLenY(double lenY) {
-        this.lenY = lenY;
+    public void setW(double w) {
+        paramValues[W_PARAM_IDX] = w;
     }
 
-    public double getLenZ() {
-        return lenZ;
+    public double getL() {
+        return paramValues[L_PARAM_IDX];
     }
 
-    public void setLenZ(double lenZ) {
-        this.lenZ = lenZ;
+    public void setL(double w) {
+        paramValues[L_PARAM_IDX] = w;
     }
+
 }

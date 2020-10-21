@@ -24,6 +24,15 @@ public class Backpack<T extends Shape> {
         this.capacity = capacity;
     }
 
+    public Backpack(ArrayList<T> shapes, double capacity) throws Exception {
+        this.capacity = capacity;
+        this.shapes = new ArrayList<>();
+        for (T shape : shapes) {
+            addShape(shape);
+        }
+        sort();
+    }
+
     public void sort() {
         shapes.sort(Collections.reverseOrder(Shape::compareTo));
     }
